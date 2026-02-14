@@ -1,0 +1,16 @@
+---
+- name: Lire la configuration du routeur et la sauvegarder
+  hosts: csr1000
+  gather_facts: false
+
+  tasks:
+    - name: Lire la configuration
+      cisco.ios.ios_command:
+        commands:
+          - show running-config
+      register: out
+
+    - name: Sauvegarder dans un fichier
+      copy:
+        content: "{{ out.stdout[0] }}"
+        dest: "running-config_csr1000.txt"
